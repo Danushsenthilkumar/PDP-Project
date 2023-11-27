@@ -1,0 +1,57 @@
+body {
+    background-color: #f8f9fa; /* Light background color */
+    color: #343a40; /* Dark text for better contrast */
+}
+
+.navbar {
+    background-color: #343a40; /* Dark background for the navbar */
+    padding: 1rem;
+}
+
+.menu ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.menu li {
+    display: inline;
+    margin-right: 20px;
+}
+
+.menu a {
+    text-decoration: none;
+    color: #fff; /* White text for navbar links */
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.container {
+    background-color: #fff; /* White background for the container */
+    border-radius: 15px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+    padding: 30px;
+    margin-top: 20px;
+}
+
+.display-4, .fs-4 {
+    color: #343a40; /* Dark text for headings */
+}
+
+.bg-body-tertiary {
+    background-color: #f8f9fa; /* Light background for the form */
+    border-radius: 10px;
+}
+
+.btn-primary {
+    background-color: #ffc107; /* Rich yellow for the button */
+    color: #343a40; /* Dark text for the button */
+    border: none;
+    border-radius: 5px;
+    padding: 10px 15px;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    background-color: #e0a800; /* Slightly darker yellow on hover */
+}

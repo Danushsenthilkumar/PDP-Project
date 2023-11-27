@@ -1,0 +1,148 @@
+{% extends 'login.html' %}
+
+{% block head %}
+<link rel="stylesheet"  href="{{ url_for('static', filename='index.css') }}">
+{% endblock %}
+
+{% block body %} 
+<div class="signup">
+        <div class="py-5 text-center">
+                <h2>Sign Up SalesPerson</h2>
+                <p class="lead">The art of medicine consists of amusing the patient while nature cures the disease!!.So from now you are going to join the service of helping others </p>
+        </div>
+
+        <form class="needs-validation" novalidate="" autocomplete="off" method="post">
+                <div class="row g-3">
+                  <div class="col-sm-6">
+                    <label for="Name" class="form-label">Name</label>
+                    <input type="text" class="form-control" name="name" id="Name" placeholder="" value="" required="" fdprocessedid="g5l1e">
+                    <div class="invalid-feedback">
+                      Valid name is required.
+                    </div>
+                  </div>
+      
+                  <div class="col-sm-6">
+                    <label for="age" class="form-label">Age</label>
+                    <input type="number" class="form-control" name="age" id="age" placeholder="" value="" required="" fdprocessedid="2xgs2a">
+                    <div class="invalid-feedback">
+                      Valid age is required.
+                    </div>
+                  </div>
+      
+                  <div class="col-12">
+                    <label for="username" class="form-label">Username</label>
+                    <div class="input-group has-validation">
+                      <span class="input-group-text">@</span>
+                      <input type="text" class="form-control" name="username" id="username" placeholder="Username" required="" fdprocessedid="kj1yb9">
+                    <div class="invalid-feedback">
+                        Your username is required.
+                      </div>
+                    </div>
+                  </div>
+      
+                  <div class="col-12">
+                    <label for="email" class="form-label">Email <span class="text-body-secondary">(Optional)</span></label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="you@example.com" fdprocessedid="cqls1q">
+                    <div class="invalid-feedback">
+                      Please enter a valid email address for shipping updates.
+                    </div>
+                  </div>
+      
+                  <div class="col-12">
+                    <label for="address" class="form-label">Address</label>
+                    <input type="text" class="form-control" id="address" name="address" placeholder="1234 Main St" required="" fdprocessedid="5arene">
+                    <div class="invalid-feedback">
+                      Please enter your shipping address.
+                    </div>
+                  </div>
+      
+                  <div class="col-12">
+                    <label for="password" class="form-label">Password<span class="text-body-secondary"></span></label>
+                    <input type="password" class="form-control" name="password" id="address2" placeholder="Atleast 6 characters" fdprocessedid="nz050a">
+                  </div>
+      
+                  <div class="col-md-5">
+                    <label for="district" class="form-label">District</label>
+                    <select class="form-select" id="district" name="district" required="" fdprocessedid="iu2tpg">
+                      <option value="">Choose...</option>
+                      <option>Salem</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please select a valid district.
+                    </div>
+                  </div>
+      
+                  <div class="col-md-4">
+                    <label for="state" class="form-label">State</label>
+                    <select class="form-select" id="state" name="state" required="" fdprocessedid="67vgwk">
+                      <option value="">Choose...</option>
+                      <option>Tamilnadu</option>
+                    </select>
+                    <div class="invalid-feedback">
+                      Please provide a valid state.
+                    </div>
+                  </div>
+      
+                  <div class="col-md-3">
+                    <label for="pin" class="form-label">Pin</label>
+                    <input type="number" class="form-control" name="pin" id="pin" placeholder="" required="" fdprocessedid="ffapek">
+                    <div class="invalid-feedback">
+                      Zip code required.
+                    </div>
+                  </div>
+                </div>
+      
+                <hr class="my-4">
+      
+                
+      
+                <hr class="my-4">
+      
+                <h4 class="mb-3">Payment Details for Salary</h4>
+      
+                <div class="row gy-3">
+                  <div class="col-md-6">
+                    <label for="cc-name" class="form-label">Account Holder Name</label>
+                    <input type="text" class="form-control" name="accountholder" id="cc-name" placeholder="" required="" fdprocessedid="wdpzy">
+                    <small class="text-body-secondary">Full name as displayed on card</small>
+                    <div class="invalid-feedback">
+                      Name on card is required
+                    </div>
+                  </div>
+      
+                  <div class="col-md-6">
+                    <label for="cc-number" class="form-label">Account number</label>
+                    <input type="number" class="form-control" name="accountnumber" id="cc-number" placeholder="" required="" fdprocessedid="6cba9b">
+                    <div class="invalid-feedback">
+                      Account card number is required
+                    </div>
+                  </div>
+      
+                  <div class="col-md-3">
+                    <label for="cc-expiration" class="form-label">UPI ID</label>
+                    <input type="text" class="form-control" name="upiid" id="cc-expiration" placeholder="" required="" fdprocessedid="d4rzpf">
+                    <div class="invalid-feedback">
+                      Expiration date required
+                    </div>
+                  </div>
+      
+                  <div class="col-md-3">
+                    <label for="cc-cvv" class="form-label">Gpay Number</label>
+                    <input type="number" class="form-control" name="gpaynumber"nameid="cc-cvv" placeholder="" required="" fdprocessedid="fqae9l">
+                    <div class="invalid-feedback">
+                      Security code required
+                    </div>
+                  </div>
+                </div>
+      
+                <hr class="my-4">
+      
+                <button class="w-100 btn btn-primary btn-lg" type="submit" fdprocessedid="aqczkh">Continue to checkout</button>
+              </form>
+</div>
+{% endblock %}
+
+
+
+
+

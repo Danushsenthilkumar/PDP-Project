@@ -1,0 +1,310 @@
+*{
+    margin: 0;
+    padding: 0;
+    
+}
+
+.main{
+    width: 100%;
+    background: linear-gradient(to top, rgba(0,0,0,0.5)50%,rgba(0,0,0,0.5)50%), url(1.jpg);
+    background-color:rgba(255, 255, 255, 0.9);
+    background-position: center;
+    background: cover;
+    height: 100vh;
+}
+
+.form-control {
+    background-color:lightgray; /* Darker blue-gray for form controls */
+    color: #fff;
+    border: 1px solid #fff;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.form-check-input {
+    background-color: #34495e;
+}
+
+.form-check-label {
+    color: #fff;
+}
+
+.btn-primary {
+    background-color: #007bff; /* Primary Blue */
+    border: 1px solid #007bff;
+}
+
+body {
+    background-color: #f8f9fa; /* Light Grayish Blue */
+}
+
+.signup {
+    background-color: #ffffff; /* White */
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.py-5.text-center {
+    padding: 5rem 0;
+    text-align: center;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3; /* Darker Blue on hover */
+    border: 1px solid #0056b3;
+}
+
+
+.home{
+    background-color: #ffffe0;
+}
+
+.navbar{
+    width: 1200px;
+    height: 75px;
+    margin: auto;
+}
+
+.icon{
+    width: 200px;
+    float: left;
+    height: 70px;
+}
+
+.logo{
+    color:lightcoral;
+    font-size: 35px;
+    font-family: Arial;
+    padding-left: 20px;
+    float: left;
+    padding-top: 10px;
+    margin-top: 5px
+}
+
+.menu{
+    width: 400px;
+    float: left;
+    height: 70px;
+}
+
+.invalid-feedback {
+    color: #dc3545; /* Red for validation messages */
+}
+
+
+ul{
+    float: left;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+ul li{
+    list-style: none;
+    margin-left: 62px;
+    margin-top: 27px;
+    font-size: 14px;
+}
+
+ul li a{
+    text-decoration: none;
+    color: #fff;
+    font-family: Arial;
+    font-weight: bold;
+    transition: 0.4s ease-in-out;
+}
+
+ul li a:hover{
+    color: lawngreen;
+}
+
+.search{
+    width: 330px;
+    float: left;
+    margin-left: 270px;
+}
+
+.srch{
+    font-family: 'Times New Roman';
+    width: 200px;
+    height: 40px;
+    background: transparent;
+    border: 1px solid lawngreen;
+    margin-top: 13px;
+    color: #fff;
+    border-right: none;
+    font-size: 16px;
+    float: left;
+    padding: 10px;
+    border-bottom-left-radius: 5px;
+    border-top-left-radius: 5px;
+}
+
+.btn{
+    width: 100px;
+    height: 40px;
+    background:lawngreen;
+    border: 2px solid lawngreen;
+    margin-top: 13px;
+    color: #fff;
+    font-size: 15px;
+    border-bottom-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    transition: 0.2s ease;
+    cursor: pointer;
+}
+.btn:hover{
+    color: #000;
+}
+
+.btn:focus{
+    outline: none;
+}
+
+.srch:focus{
+    outline: none;
+}
+
+.content{
+    width: 1200px;
+    height: auto;
+    margin: auto;
+    color: #fff;
+    position: relative;
+}
+
+
+
+
+
+
+
+.content span{
+    color: lawngreen;
+    font-size: 65px
+}
+
+.form {
+    width: 300px;
+    height: auto;
+    background: linear-gradient(to top, rgba(0,0,0,0.8)50%, rgba(0,0,0,0.8)50%);
+    position: absolute;
+    top: 90px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-radius: 10px;
+    padding: 25px;
+}
+
+.form h2 {
+    width: 100%;
+    text-align: center;
+    color: lawngreen;
+    font-size: 22px;
+    background-color: #fff;
+    border-radius: 10px;
+    margin: 2px;
+    padding: 8px;
+}
+
+.form input,
+.form textarea,
+.form select {
+    width: 100%;
+    height: 35px;
+    background: transparent;
+    border-bottom: 1px solid lawngreen;
+    border-top: none;
+    border-right: none;
+    border-left: none;
+    color: #fff;
+    font-size: 15px;
+    letter-spacing: 1px;
+    margin-top: 10px;
+    font-family: sans-serif;
+    padding: 5px; /* Added padding for better appearance */
+}
+
+
+
+.form textarea {
+    height: 60px; /* Adjust the height of the textarea as needed */
+    resize: none; /* Prevent resizing of textarea */
+}
+
+.form button.btnn {
+    width: 100%;
+    height: 40px;
+    background: lawngreen;
+    border: none;
+    margin-top: 20px;
+    font-size: 18px;
+    border-radius: 10px;
+    cursor: pointer;
+    color: #fff;
+    transition: 0.4s ease;
+}
+
+.form-check-label,
+.form-label,
+.text-body-secondary {
+    color: #495057; /* Dark Gray */
+}
+
+.form button.btnn:hover {
+    background: #fff;
+    color: lawngreen;
+}
+
+.form .link {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 14px;
+    text-align: center;
+    color: lawngreen;
+    margin-top: 15px;
+}
+
+.form .link a {
+    text-decoration: none;
+    color:lawngreen;
+    font-weight: bold;
+}
+
+
+.form input:focus{
+    outline: none;
+}
+
+::placeholder{
+    color: #fff;
+    font-family: Arial;
+}
+
+
+
+
+.liw{
+    padding-top: 15px;
+    padding-bottom: 10px;
+    text-align: center;
+}
+.icons a{
+    text-decoration: none;
+    color: #fff;
+}
+.icons ion-icon{
+    color: #fff;
+    font-size: 30px;
+    padding-left: 14px;
+    padding-top: 5px;
+    transition: 0.3s ease;
+}
+.icons ion-icon:hover{
+    color: lawngreen;
+}
+
+.container py-5{
+    top:160px
+}
+
