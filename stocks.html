@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Stock</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+        }
+
+        table {
+            border-collapse: collapse;
+            width: 80%;
+            margin: 20px auto;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        .low-stock-button {
+            background-color: #f44336;
+            color: white;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .low-stock-button:hover {
+            background-color: #d32f2f;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Medicine Stock</h2>
+
+<table>
+    <thead>
+        <tr>
+            <th>Medicine</th>
+            <th>Stock</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Sample medicine rows -->
+        <tr>
+            <td>Medicine A</td>
+            <td class="stock">20</td>
+            <td><button class="low-stock-button" onclick="handleLowStock('Medicine A', 20)">Order More</button></td>
+        </tr>
+        <tr>
+            <td>Medicine B</td>
+            <td class="stock">5</td>
+            <td><button class="low-stock-button" onclick="handleLowStock('Medicine B', 5)">Order More</button></td>
+        </tr>
+        <!-- Add more medicine rows as needed -->
+    </tbody>
+</table>
+
+<script>
+    // Function to handle low stock action
+    function handleLowStock(medicineName, currentStock) {
+        if (currentStock <= 5) {
+            // Add your logic here for handling low stock action
+            alert(`Low stock for ${medicineName}. Clicked "Order More" button.`);
+        } else {
+            alert(`${medicineName} stock is sufficient.`);
+        }
+    }
+</script>
+</body>
+</html>
+

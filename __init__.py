@@ -15,9 +15,11 @@ def create_app():
 
     from .views import views
     from .auth import auth
+    from.models import models
 
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(models, url_prefix='/')
 
     # Create tables if they do not exist
     with app.app_context():
@@ -26,8 +28,5 @@ def create_app():
     return app
 
 
-def create_database(app):
-    if not path.exists('website/' + DB_NAME):
-        db.create_all(app=app)
-        print('Created Database!')
+
 

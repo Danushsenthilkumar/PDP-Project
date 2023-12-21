@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medical Shop Cart</title>
+    <style>
+        body, h1, h2, p, ul, li {
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .main-header {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .section-header {
+            color: #4CAF50;
+        }
+
+        .shop-items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .shop-items-table th, .shop-items-table td {
+            border: 1px solid #ddd;
+            padding: 15px;
+            text-align: left;
+        }
+
+        .shop-item-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #333;
+        }
+
+        .shop-item-price {
+            font-size: 1em;
+            color: #4CAF50;
+        }
+
+        .shop-item-button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-size: 1em;
+        }
+
+        .shop-item-button:hover {
+            background-color: #45a049;
+        }
+
+        .cart-row, .cart-item, .cart-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-item {
+            flex: 2;
+            align-items: center;
+            display: flex;
+        }
+
+        .cart-item-image {
+            max-width: 50px;
+            max-height: 50px;
+            margin-right: 10px;
+        }
+
+        .cart-price, .cart-quantity {
+            flex: 1;
+        }
+
+        .cart-quantity-input {
+            width: 40px;
+            padding: 5px;
+        }
+
+        .btn {
+            padding: 10px 15px;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-primary {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .btn-danger {
+            background-color: #f44336;
+            color: white;
+        }
+
+        .btn-primary:hover, .btn-danger:hover {
+            opacity: 0.8;
+        }
+
+        .cart-total {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .btn-purchase {
+            background-color: #4CAF50;
+            color: white;
+            padding: 15px 20px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-top: 20px;
+        }
+
+        .btn-purchase:hover {
+            background-color: #45a049;
+        }
+
+        .main-footer {
+            background-color: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 15px;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+
+<body>
+    <header class="main-header">
+        <h1 class="band-name band-name-large">Medical Shop</h1>
+    </header>
+
+    <section class="container content-section">
+        <h2 class="section-header">Medicines</h2>
+        <table class="shop-items-table">
+            <thead>
+                <tr>
+                    <th>Medicine</th>
+                    <th>Price</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody id="medicinesContainer">
+                <!-- Medicines will be dynamically added here by JavaScript -->
+            </tbody>
+        </table>
+    </section>
+
+    <section class="container content-section">
+        <h2 class="section-header">CART</h2>
+        <div class="cart-row">
+            <span class="cart-item cart-header cart-column">ITEM</span>
+            <span class="cart-price cart-header cart-column">PRICE</span>
+            <span class="cart-quantity cart-header cart-column">QUANTITY</span>
+        </div>
+        <div class="cart-items">
+            <!-- Cart items will be dynamically added here by JavaScript -->
+        </div>
+        <div class="cart-total">
+            <strong class="cart-total-title">Total</strong>
+            <span class="cart-total-price">$0</span>
+        </div>
+        <button class="btn btn-primary btn-purchase" type="button">PURCHASE</button>
+    </section>
+
+    <footer class="main-footer">
+        <div class="container main-footer-container">
+            <h3 class="band-name">Medical Shop</h3>
+        </div>
+    </footer>
+
+    <script>
+       document.addEventListener('DOMContentLoaded', function () {
+    var medicinesContainer = document.getElementById('medicinesContainer');
+    var cartItemsContainer = document.querySelector('.cart-items');
+
+    // Access the JSON string of medicinesData from the template
+    var medicinesData = JSON.parse('{{ medicinesData|tojson|safe }}');
+
+    // Extract medicine names and prices
+    var medicineNamesAndPrices = Object.entries(medicinesData).map(([medicineName, details]) => ({
+        name: medicineName,
+        price: details.price
+    }));
+
+    // Order history array
+    var orderHistory = [];
+
+    // Function to parse CSV content into a dictionary
+    function parseCSV(csvContent) {
+        var lines = csvContent.trim().split('\n');
+        var headers = lines[0].split(',');
+
+        var result = [];
+
+        for (var i = 1; i < lines.length; i++) {
+            var obj = {};
+            var currentline = lines[i].split(',');
+
+            for (var j = 0; j < headers.length; j++) {
+                obj[headers[j].trim()] = currentline[j].trim();
+            }
+
+            result.push(obj);
+        }
+
+        return result;
+    }
+
+    // Read the order history from localStorage
+    var orderHistoryCSV = localStorage.getItem('orderHistory') || '';
+    orderHistory = parseCSV(orderHistoryCSV);
+
+    // Log the order history array
+    console.log(orderHistory);
+
+    // Event listener for Add to Cart buttons
+    medicinesContainer.addEventListener('click', function (event) {
+        if (event.target.classList.contains('shop-item-button')) {
+            var shopItem = event.target.closest('.shop-item');
+            var title = shopItem.querySelector('.shop-item-title').innerText;
+            var price = shopItem.querySelector('.shop-item-price').innerText;
+
+            // Check if the medicine is already in the cart
+            var cartItemTitles = cartItemsContainer.querySelectorAll('.cart-item-title');
+            for (var i = 0; i < cartItemTitles.length; i++) {
+                if (cartItemTitles[i].innerText === title) {
+                    alert('This item is already added to the cart');
+                    return;
+                }
+            }
+
+            addItemToCart(title, price);
+            updateCartTotal();
+        }
+    });
+
+    // Event listener for Remove buttons
+    cartItemsContainer.addEventListener('click', function (event) {
+        if (event.target.classList.contains('btn-danger')) {
+            var buttonClicked = event.target;
+            var cartItem = buttonClicked.parentElement.parentElement;
+            var title = cartItem.querySelector('.cart-item-title').innerText;
+
+            // Remove the item from the cart
+            cartItem.remove();
+
+            // Update the cart total
+            updateCartTotal();
+
+            // Log the updated order history
+            console.log(orderHistory);
+        }
+    });
+
+    // Event listener for Quantity inputs
+    cartItemsContainer.addEventListener('change', function (event) {
+        if (event.target.classList.contains('cart-quantity-input')) {
+            var input = event.target;
+            if (isNaN(input.value) || input.value <= 0) {
+                input.value = 1;
+            }
+            updateCartTotal();
+        }
+    });
+
+    // Event listener for Purchase button
+    document.querySelector('.btn-purchase').addEventListener('click', function () {
+        // Create a CSV content string
+        var csvContent = "Medicine,Price,Quantity\n";
+
+        // Iterate over cart items and add them to the CSV content
+        var cartRows = document.querySelectorAll('.cart-row');
+        cartRows.forEach(function (cartRow) {
+            var titleElement = cartRow.querySelector('.cart-item-title');
+            var priceElement = cartRow.querySelector('.cart-price');
+            var quantityElement = cartRow.querySelector('.cart-quantity-input');
+
+            // Check if any element is null
+            if (titleElement && priceElement && quantityElement) {
+                var title = titleElement.innerText;
+                var price = priceElement.innerText;
+                var quantity = quantityElement.value;
+
+                // Append data to CSV content
+                csvContent += `"${title}","${price}","${quantity}"\n`;
+            }
+        });
+
+        // Create or get the existing CSV content from localStorage
+        var existingCSVContent = localStorage.getItem('orderHistory') || '';
+        var fullCSVContent = existingCSVContent + csvContent;
+
+        // Save the CSV content to localStorage
+        localStorage.setItem('orderHistory', fullCSVContent);
+
+        // Create an order object and push it to the order history array
+        var orderObject = createOrderObject();
+        orderHistory.push(orderObject);
+
+        // Log the order history array
+        console.log(orderHistory);
+
+        // Create a Blob with the CSV content
+        var blob = new Blob([fullCSVContent], { type: 'text/csv' });
+
+        // Create a download link
+        var link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = 'order_history.csv';
+
+        // Append the link to the document and trigger the click event
+        document.body.appendChild(link);
+        link.click();
+
+        // Remove the link from the document
+        document.body.removeChild(link);
+
+        // Clear the cart after purchase
+        clearCart();
+        updateCartTotal();
+    });
+
+    // Dynamically generate medicines
+    medicineNamesAndPrices.forEach(function (medicine) {
+        var medicineRow = document.createElement('tr');
+        medicineRow.classList.add('shop-item');
+        medicineRow.innerHTML = `
+            <td class="shop-item-title">${medicine.name}</td>
+            <td class="shop-item-price">$${medicine.price.toFixed(2)}</td>
+            <td><button class="btn btn-primary shop-item-button" type="button">ADD TO CART</button></td>
+        `;
+        medicinesContainer.appendChild(medicineRow);
+    });
+
+    function addItemToCart(title, price) {
+        var cartRow = document.createElement('div');
+        cartRow.classList.add('cart-row');
+        cartRow.innerHTML = `
+            <div class="cart-item cart-column">
+                <span class="cart-item-title">${title}</span>
+            </div>
+            <span class="cart-price cart-column">${price}</span>
+            <div class="cart-quantity cart-column">
+                <input class="cart-quantity-input" type="number" value="1">
+                <button class="btn btn-danger" type="button">REMOVE</button>
+            </div>`;
+        cartRow.querySelector('.btn-danger').addEventListener('click', function () {
+            var removedTitle = cartRow.querySelector('.cart-item-title').innerText;
+            removeItemFromCart(removedTitle);
+            cartRow.remove();
+            updateCartTotal();
+        });
+
+        cartRow.querySelector('.cart-quantity-input').addEventListener('change', function () {
+            updateCartTotal();
+        });
+
+        cartItemsContainer.appendChild(cartRow);
+    }
+
+    function updateCartTotal() {
+        var cartItemContainer = document.querySelector('.cart-items');
+        var cartRows = cartItemContainer.getElementsByClassName('cart-row');
+        var total = 0;
+        for (var i = 0; i < cartRows.length; i++) {
+            var cartRow = cartRows[i];
+            var priceElement = cartRow.querySelector('.cart-price');
+            var quantityElement = cartRow.querySelector('.cart-quantity-input');
+            var price = parseFloat(priceElement.innerText.replace('$', ''));
+            var quantity = quantityElement.value;
+            total = total + price * quantity;
+        }
+        total = Math.round(total * 100) / 100;
+        document.querySelector('.cart-total-price').innerText = '$' + total;
+    }
+
+    function createOrderObject() {
+        var orderObject = {
+            medicines: []
+        };
+
+        var cartRows = document.querySelectorAll('.cart-row');
+        cartRows.forEach(function (cartRow) {
+            var titleElement = cartRow.querySelector('.cart-item-title');
+            var priceElement = cartRow.querySelector('.cart-price');
+            var quantityElement = cartRow.querySelector('.cart-quantity-input');
+
+            if (titleElement && priceElement && quantityElement) {
+                var medicine = {
+                    title: titleElement.innerText,
+                    price: priceElement.innerText,
+                    quantity: quantityElement.value
+                };
+                orderObject.medicines.push(medicine);
+            }
+        });
+
+        return orderObject;
+    }
+
+    function removeItemFromCart(title) {
+        // Find the index of the item with the specified title in the order history
+        var indexToRemove = orderHistory.findIndex(function (order) {
+            return order.medicines.some(function (medicine) {
+                return medicine.title === title;
+            });
+        });
+
+        // Remove the item from the order history array
+        if (indexToRemove !== -1) {
+            orderHistory.splice(indexToRemove, 1);
+        }
+
+        // Log the updated order history
+        console.log(orderHistory);
+    }
+
+    function clearCart() {
+        while (cartItemsContainer.hasChildNodes()) {
+            cartItemsContainer.removeChild(cartItemsContainer.firstChild);
+        }
+    }
+});
+
+
+    </script>
+
+
+    
+</body>
+
+</html>

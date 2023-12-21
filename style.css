@@ -1,0 +1,139 @@
+body, h1, h2, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.main-header {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 15px;
+}
+
+.section-header {
+    color: #4CAF50;
+}
+
+.shop-items {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.shop-item {
+    border: 1px solid #ddd;
+    padding: 15px;
+    text-align: center;
+    margin: 10px;
+}
+
+.shop-item-title {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #333;
+}
+
+.shop-item-price {
+    font-size: 1em;
+    color: #4CAF50;
+}
+
+.shop-item-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 10px;
+    cursor: pointer;
+    font-size: 1em;
+}
+
+.shop-item-button:hover {
+    background-color: #45a049;
+}
+
+.cart-row, .cart-item, .cart-total {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
+}
+
+.cart-item {
+    flex: 2;
+    align-items: center;
+    display: flex;
+}
+
+.cart-item-image {
+    max-width: 50px;
+    max-height: 50px;
+    margin-right: 10px;
+}
+
+.cart-price, .cart-quantity {
+    flex: 1;
+}
+
+.cart-quantity-input {
+    width: 40px;
+    padding: 5px;
+}
+
+.btn {
+    padding: 10px 15px;
+    cursor: pointer;
+    border: none;
+}
+
+.btn-primary {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.btn-danger {
+    background-color: #f44336;
+    color: white;
+}
+
+.btn-primary:hover, .btn-danger:hover {
+    opacity: 0.8;
+}
+
+.cart-total {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin-top: 10px;
+}
+
+.btn-purchase {
+    background-color: #4CAF50;
+    color: white;
+    padding: 15px 20px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-top: 20px;
+}
+
+.btn-purchase:hover {
+    background-color: #45a049;
+}
+
+.main-footer {
+    background-color: #4CAF50;
+    color: white;
+    text-align: center;
+    padding: 15px;
+    margin-top: 20px;
+}

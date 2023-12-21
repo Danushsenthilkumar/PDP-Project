@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Medicine Store</title>
+    <style>
+        /* Existing styles remain unchanged */
+
+        /* Add a style for the "Add to Bill" button */
+        .addToBillButton {
+            background-color: #008CBA;
+        }
+
+        .addToBillButton:hover {
+            background-color: #006080;
+        }
+    </style>
+</head>
+
+<body>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Medicine Name</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for medicine_name, details in medicines.items() %}
+                <tr>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ medicine_name }}</td>
+                    <td id="med_quantity_{{ medicine_name }}">{{ details.quantity }}</td>
+                    <td>{{ details.price }}</td>
+                    <td>
+                        <button onclick="addToCart('{{ medicine_name }}', {{ details.price }})">Add to Cart</button>
+                        <button class="addToBillButton" onclick="addToBill('{{ medicine_name }}', {{ details.price }})">Add to Bill</button>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <div id="cart">
+        <h3>Shopping Cart</h3>
+        <ul id="cart-items"></ul>
+        <p>Total: ₹<span id="cart-total">0.00</span></p>
+    </div>
+
+    <!-- Modify the "Generate Bill" button to call a new function -->
+    <button id="bill" onclick="generateBill()">Generate Bill</button>
+    <button id="proceed" onclick="proceedToPay()">Proceed to Pay</button>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+    <script>
+        // Initialize your dictionary (replace this with your actual dictionary)
+        
+
+        // Load cartItems and cartTotal from sessionStorage
+        let cartItems = JSON.parse(sessionStorage.getItem('cartItems')) || [];
+        let cartTotal = parseFloat(sessionStorage.getItem('cartTotal')) || 0.00;
+        
+        function addToCart(medicineName, price) {
+            let medicineQuantityElement = document.getElementById(`med_quantity_${medicineName}`);
+            let currentQuantity = parseInt(medicineQuantityElement.textContent);
+
+            if (currentQuantity > 0) {
+                cartItems.push({ name: medicineName, price: price, addToBill: false });
+                cartTotal += price;
+
+                // Update medicine quantity
+                medicineQuantityElement.textContent = currentQuantity - 1;
+
+                // Update cart display
+                updateCartDisplay();
+
+                // Save cartItems and cartTotal to sessionStorage
+                saveCartToSessionStorage();
+            } else {
+                alert(`Sorry, ${medicineName} is out of stock.`);
+            }
+        }
+
+        function addToBill(medicineName, price) {
+    let medicineQuantityElement = document.getElementById(`med_quantity_${medicineName}`);
+    let currentQuantity = parseInt(medicineQuantityElement.textContent);
+
+    if (currentQuantity > 0) {
+        // Send AJAX request to update the backend quantity
+        $.ajax({
+            type: 'POST',
+            url: '/update_quantity',
+            data: { medicine_name: medicineName, quantity: currentQuantity - 1 },
+            success: function (response) {
+                // Handle the server response
+                console.log(response);
+
+                // Update the frontend if needed
+                if (response.response === 'quantity updated') {
+                    // Update the quantity display on the frontend
+                    medicineQuantityElement.textContent = currentQuantity - 1;
+
+                    // Update cart display
+                    updateCartDisplay();
+
+                    // Log a message indicating success
+                    console.log(`Quantity for ${medicineName} updated successfully for Add to Bill.`);
+                } else {
+                    // Log an error message
+                    console.error(`Failed to update quantity for ${medicineName} for Add to Bill.`);
+                }
+            },
+            error: function (error) {
+                // Handle errors
+                console.error('Error:', error);
+            }
+        });
+    } else {
+        alert(`Sorry, ${medicineName} is out of stock.`);
+    }
+}
+        function updateCartDisplay() {
+            let cartList = document.getElementById('cart-items');
+            let cartTotalDisplay = document.getElementById('cart-total');
+
+            // Clear previous items
+            cartList.innerHTML = '';
+
+            // Populate cart list
+            cartItems.forEach(item => {
+                let listItem = document.createElement('li');
+                listItem.textContent = `${item.name} - ₹${item.price.toFixed(2)}`;
+                cartList.appendChild(listItem);
+            });
+
+            // Update total
+            cartTotalDisplay.textContent = cartTotal.toFixed(2);
+        }
+
+        function saveCartToSessionStorage() {
+            // Save cartItems and cartTotal to sessionStorage
+            sessionStorage.setItem('cartItems', JSON.stringify(cartItems));
+            sessionStorage.setItem('cartTotal', cartTotal.toFixed(2));
+        }
+
+        function generateBill() {
+            console.log("Medicines before generating bill:", JSON.parse(JSON.stringify(medicines)));
+            // Initialize currentBill as an empty object
+            currentBill = currentBill || {};
+
+            // Save the current bill to local storage
+            currentBill.items = cartItems;
+            currentBill.total = cartTotal.toFixed(2);
+            localStorage.setItem(`bill_${currentBillId}`, JSON.stringify(currentBill));
+
+            // Start a new bill for the next visit
+            currentBillId = 'bill_' + Date.now(); // Using a timestamp for simplicity
+            sessionStorage.setItem('currentBillId', currentBillId);
+
+            // Reset cart items and total
+            cartItems = [];
+            cartTotal = 0.00;
+
+            // Log medicines after generating the bill
+            console.log("Medicines after generating bill:", JSON.parse(JSON.stringify(medicines)));
+
+            // Update cart display
+            updateCartDisplay();
+
+            // Save cartItems and cartTotal to sessionStorage
+            saveCartToSessionStorage();
+        }
+
+        function proceedToPay() {
+            // ... (existing proceedToPay logic)
+
+            // End the current bill session
+            sessionStorage.removeItem('currentBillId');
+        }
+
+        // Initialize the cart display
+        updateCartDisplay();
+
+    </script>
+
+</body>
+
+</html>
