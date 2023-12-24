@@ -285,57 +285,46 @@
         }
     });
 
-    // Event listener for Purchase button
     document.querySelector('.btn-purchase').addEventListener('click', function () {
-        // Create a CSV content string
-        var csvContent = "Medicine,Price,Quantity\n";
+            // Create a CSV content string for the current order
+            var csvContent = "Medicine,Price,Quantity\n";
 
-        // Iterate over cart items and add them to the CSV content
-        var cartRows = document.querySelectorAll('.cart-row');
-        cartRows.forEach(function (cartRow) {
-            var titleElement = cartRow.querySelector('.cart-item-title');
-            var priceElement = cartRow.querySelector('.cart-price');
-            var quantityElement = cartRow.querySelector('.cart-quantity-input');
+            // Iterate over cart items and add them to the CSV content
+            var cartRows = document.querySelectorAll('.cart-row');
+            cartRows.forEach(function (cartRow) {
+                var titleElement = cartRow.querySelector('.cart-item-title');
+                var priceElement = cartRow.querySelector('.cart-price');
+                var quantityElement = cartRow.querySelector('.cart-quantity-input');
 
-            // Check if any element is null
-            if (titleElement && priceElement && quantityElement) {
-                var title = titleElement.innerText;
-                var price = priceElement.innerText;
-                var quantity = quantityElement.value;
+                // Check if any element is null
+                if (titleElement && priceElement && quantityElement) {
+                    var title = titleElement.innerText;
+                    var price = priceElement.innerText;
+                    var quantity = quantityElement.value;
 
-                // Append data to CSV content
-                csvContent += `"${title}","${price}","${quantity}"\n`;
-            }
-        });
+                    // Append data to CSV content
+                    csvContent += `"${title}","${price}","${quantity}"\n`;
+                }
+            });
 
-        // Create or get the existing CSV content from localStorage
-        var existingCSVContent = localStorage.getItem('orderHistory') || '';
-        var fullCSVContent = existingCSVContent + csvContent;
-
-        // Save the CSV content to localStorage
-        localStorage.setItem('orderHistory', fullCSVContent);
-
-        // Create an order object and push it to the order history array
-        var orderObject = createOrderObject();
-        orderHistory.push(orderObject);
-
-        // Log the order history array
-        console.log(orderHistory);
+        
 
         // Create a Blob with the CSV content
-        var blob = new Blob([fullCSVContent], { type: 'text/csv' });
+        var blob = new Blob([csvContent], { type: 'text/csv' });
 
         // Create a download link
         var link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.download = 'order_history.csv';
-
+       
         // Append the link to the document and trigger the click event
         document.body.appendChild(link);
         link.click();
 
         // Remove the link from the document
         document.body.removeChild(link);
+
+       
 
         // Clear the cart after purchase
         clearCart();

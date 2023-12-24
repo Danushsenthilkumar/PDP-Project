@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Monthly Sales Report</title>
+</head>
+<body>
+     <h1>Monthly Sales Report</h1>
+    
+    {% if report %}
+        <p>Month: {{ report['Month'] }}</p>
+        <p>Top Selling Medicine: {{ report['Top Selling Medicine'] }}</p>
+        <p>Total Sales: {{ report['Total Sales'] }}</p>
+    {% else %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    <form action="{{ url_for('sales.monthly_report_form') }}" method="POST">
+        <label for="month">Select Month (YYYY-MM):</label>
+        <input type="text" name="month" pattern="\d{4}-\d{2}" title="Enter a valid month (YYYY-MM)" required>
+        <button type="submit">Generate Report</button>
+    </form>
+</body>
+</html>
+

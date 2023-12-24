@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Sales Report</title>
+</head>
+<body>
+    <h1>Daily Sales Report</h1>
+    
+    {% if report %}
+        <p>Date: {{ report['Date'] }}</p>
+        <p>Top Selling Medicine: {{ report['Top Selling Medicine'] }}</p>
+        <p>Total Sales: {{ report['Total Sales'] }}</p>
+    {% else %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    <form action="{{ url_for('sales.daily_report_form') }}" method="POST">
+        <label for="date">Select Date:</label>
+        <input type="date" name="date" required>
+        <button type="submit">Generate Report</button>
+    </form>
+</body>
+</html>

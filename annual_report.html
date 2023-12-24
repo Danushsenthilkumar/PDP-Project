@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Annual Sales Report</title>
+</head>
+<body>
+    <h1>Annual Sales Report</h1>
+    
+    {% if report %}
+        <p>Year: {{ report['Year'] }}</p>
+        <p>Top Selling Medicine: {{ report['Top Selling Medicine'] }}</p>
+        <p>Total Sales: {{ report['Total Sales'] }}</p>
+    {% else %}
+        <p>{{ error }}</p>
+    {% endif %}
+
+    <form action="{{ url_for('sales.annual_report_form') }}" method="POST">
+        <label for="year">Select Year (YYYY):</label>
+        <input type="text" name="year" pattern="\d{4}" title="Enter a valid year (YYYY)" required>
+        <button type="submit">Generate Report</button>
+    </form>
+</body>
+</html>
