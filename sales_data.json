@@ -1,0 +1,58 @@
+{
+    "sales": [
+        {
+            "date": "2023-12-01",
+            "total_sales": 150.0,
+            "medicines_sold": [
+                {
+                    "name": "Medicine A",
+                    "quantity": 10
+                },
+                {
+                    "name": "Medicine B",
+                    "quantity": 5
+                },
+                {
+                    "name": "Medicine C",
+                    "quantity": 8
+                }
+            ]
+        },
+        {
+            "date": "2023-12-02",
+            "total_sales": 200.0,
+            "medicines_sold": [
+                {
+                    "name": "Medicine A",
+                    "quantity": 15
+                },
+                {
+                    "name": "Medicine B",
+                    "quantity": 7
+                },
+                {
+                    "name": "Medicine D",
+                    "quantity": 12
+                }
+            ]
+        },
+        {
+            "date": "2023-12-03",
+            "total_sales": 180.0,
+            "medicines_sold": [
+                {
+                    "name": "Medicine A",
+                    "quantity": 12
+                },
+                {
+                    "name": "Medicine C",
+                    "quantity": 6
+                },
+                {
+                    "name": "Medicine D",
+                    "quantity": 10
+                }
+            ]
+        }
+    ]
+}
