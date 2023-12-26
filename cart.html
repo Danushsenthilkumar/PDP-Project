@@ -5,6 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Medical Shop Cart</title>
+    <script src="https://cdn.emailjs.com/dist/email.min.js"></script>
+
     <style>
         body, h1, h2, p, ul, li {
             margin: 0;
@@ -181,7 +183,11 @@
             <strong class="cart-total-title">Total</strong>
             <span class="cart-total-price">$0</span>
         </div>
+
+        <label for="customer-email">Email:</label>
+        <input type="email" id="customer-email" required>
         <button class="btn btn-primary btn-purchase" type="button">PURCHASE</button>
+        <button class="btn btn-primary btn-print-invoice" type="button">Print Invoice</button>
     </section>
 
     <footer class="main-footer">
@@ -191,9 +197,11 @@
     </footer>
 
     <script>
-       document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function () {
     var medicinesContainer = document.getElementById('medicinesContainer');
     var cartItemsContainer = document.querySelector('.cart-items');
+    var recipientEmailInput = document.getElementById('customer-email');
+    var recipientEmail;
 
     // Access the JSON string of medicinesData from the template
     var medicinesData = JSON.parse('{{ medicinesData|tojson|safe }}');
@@ -203,6 +211,43 @@
         name: medicineName,
         price: details.price
     }));
+
+    
+    function sendEmail(orderObject, recipientEmail) {
+    // Replace these values with your Email.js information
+    var user_id = 'hj9H3opY3i76HzKcb';
+    var service_id = 'service_qh8s6nn';
+    var template_id = 'template_3d98jtr'; // Replace with your Email.js template ID
+
+    emailjs.init(user_id);
+
+    // Prepare the email parameters
+    var emailParams = {
+        to_email: recipientEmail,
+        subject: 'Medical Shop Purchase Details',
+        orderDetails: formatOrderDetails(orderObject) // Format the order details
+    };
+
+    // Send the email
+    emailjs.send(service_id, template_id, emailParams)
+        .then(function (response) {
+            console.log('Email sent successfully:', response);
+        }, function (error) {
+            console.error('Email sending failed:', error);
+        });
+}
+
+function formatOrderDetails(orderObject) {
+    var formattedDetails = 'Medicine\tPrice\tQuantity\n';
+
+    orderObject.medicines.forEach(function (medicine) {
+        formattedDetails += `${medicine.title}\t${medicine.price}\t${medicine.quantity}\n`;
+    });
+
+    formattedDetails += `\nTotal: $${orderObject.total.toFixed(2)}`;
+
+    return formattedDetails;
+}
 
     // Order history array
     var orderHistory = [];
@@ -286,28 +331,48 @@
     });
 
     document.querySelector('.btn-purchase').addEventListener('click', function () {
-            // Create a CSV content string for the current order
-            var csvContent = "Medicine,Price,Quantity\n";
+    // Get the recipient email when the purchase button is clicked
+    recipientEmail = recipientEmailInput.value;
 
-            // Iterate over cart items and add them to the CSV content
-            var cartRows = document.querySelectorAll('.cart-row');
-            cartRows.forEach(function (cartRow) {
-                var titleElement = cartRow.querySelector('.cart-item-title');
-                var priceElement = cartRow.querySelector('.cart-price');
-                var quantityElement = cartRow.querySelector('.cart-quantity-input');
+    // Create a CSV content string for the current order
+    var csvContent = "Medicine,Price,Quantity\n";
+    var orderObject = createOrderObject();
 
-                // Check if any element is null
-                if (titleElement && priceElement && quantityElement) {
-                    var title = titleElement.innerText;
-                    var price = priceElement.innerText;
-                    var quantity = quantityElement.value;
+    // Iterate over cart items and add them to the CSV content and orderObject
+    var cartRows = document.querySelectorAll('.cart-row');
+    cartRows.forEach(function (cartRow) {
+        var titleElement = cartRow.querySelector('.cart-item-title');
+        var priceElement = cartRow.querySelector('.cart-price');
+        var quantityElement = cartRow.querySelector('.cart-quantity-input');
 
-                    // Append data to CSV content
-                    csvContent += `"${title}","${price}","${quantity}"\n`;
-                }
-            });
+        // Check if any element is null
+        if (titleElement && priceElement && quantityElement) {
+            var title = titleElement.innerText;
+            var price = parseFloat(priceElement.innerText.replace('$', '')) || 0; // Ensure valid number
+            var quantity = parseInt(quantityElement.value) || 0; // Ensure valid number
 
-        
+            // Append data to CSV content
+            csvContent += `"${title}","${price}","${quantity}"\n`;
+
+            // Add medicine details to orderObject
+            var medicine = {
+                title: title,
+                price: price,
+                quantity: quantity
+            };
+            orderObject.medicines.push(medicine);
+
+            // Update the total in orderObject
+            orderObject.total += price * quantity;
+        }
+    });
+
+    // Log the orderObject to check its contents
+    console.log('Order Object:', orderObject);
+
+    if (recipientEmail) {
+        // Send the email
+        sendEmail(orderObject, recipientEmail);
 
         // Create a Blob with the CSV content
         var blob = new Blob([csvContent], { type: 'text/csv' });
@@ -316,7 +381,7 @@
         var link = document.createElement('a');
         link.href = window.URL.createObjectURL(blob);
         link.download = 'order_history.csv';
-       
+
         // Append the link to the document and trigger the click event
         document.body.appendChild(link);
         link.click();
@@ -324,12 +389,16 @@
         // Remove the link from the document
         document.body.removeChild(link);
 
-       
-
         // Clear the cart after purchase
         clearCart();
         updateCartTotal();
-    });
+    }
+});
+
+document.querySelector('.btn-print-invoice').addEventListener('click', function () {
+                printInvoice();
+            });
+
 
     // Dynamically generate medicines
     medicineNamesAndPrices.forEach(function (medicine) {
@@ -386,28 +455,34 @@
     }
 
     function createOrderObject() {
-        var orderObject = {
-            medicines: []
-        };
+    var orderObject = {
+        medicines: []
+    };
 
-        var cartRows = document.querySelectorAll('.cart-row');
-        cartRows.forEach(function (cartRow) {
-            var titleElement = cartRow.querySelector('.cart-item-title');
-            var priceElement = cartRow.querySelector('.cart-price');
-            var quantityElement = cartRow.querySelector('.cart-quantity-input');
+    var cartRows = document.querySelectorAll('.cart-row');
+    cartRows.forEach(function (cartRow) {
+        var titleElement = cartRow.querySelector('.cart-item-title');
+        var priceElement = cartRow.querySelector('.cart-price');
+        var quantityElement = cartRow.querySelector('.cart-quantity-input');
 
-            if (titleElement && priceElement && quantityElement) {
-                var medicine = {
-                    title: titleElement.innerText,
-                    price: priceElement.innerText,
-                    quantity: quantityElement.value
-                };
-                orderObject.medicines.push(medicine);
-            }
-        });
+        if (titleElement && priceElement && quantityElement) {
+            var title = titleElement.innerText;
+            // Remove the currency symbol ('$') from the price
+            var price = priceElement.innerText.replace('$', '');
+            var quantity = quantityElement.value;
 
-        return orderObject;
-    }
+            // Append data to orderObject
+            orderObject.medicines.push({
+                title: title,
+                price: price,
+                quantity: quantity
+            });
+        }
+    });
+
+    return orderObject;
+}
+
 
     function removeItemFromCart(title) {
         // Find the index of the item with the specified title in the order history
@@ -433,6 +508,10 @@
     }
 });
 
+
+function printInvoice(){
+    window.print();
+}
 
     </script>
 
